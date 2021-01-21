@@ -36,21 +36,15 @@ from sakila.rental
 limit 20;
 
 ######8 Add an additional column day_type with values 'weekend' and 'workday' depending on the rental day of the week.
-ALTER TABLE sakila.rental
-ADD COLUMN type_day TEXT;
 
 SELECT * from sakila.rental;
 
-update sakila.rental
-SET type_day = "Weekday"
-WHERE WEEKDAY(rental_date) >= 5;
-
-select * from sakila.rental; 
-
-update sakila.rental
-SET type_day = "Weekend"
-WHERE WEEKDAY(rental_date) <= 6;
-
+select *,   case    	
+   when date_format(rental_date, '%a') in ('Mon', 'Tue', 'Wed', 'Thu', 'Fri') then 'workday'
+   when date_format(rental_date, '%a') in ('Sat', 'Sun') then 'weekend'
+end as day_type
+from sakila.rental;
+ 
 select * from sakila.rental;
 
 ######9 How many rentals were in the last month of activity?
